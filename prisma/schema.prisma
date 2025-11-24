@@ -45,7 +45,7 @@ model Plan {
 
 model Course {
   id          Int          @id @default(autoincrement())
-  title       String
+  title       String       @unique
   description String?
   lessons     Lesson[]
   enrollments Enrollment[]
@@ -58,6 +58,7 @@ model Lesson {
   title       String
   content     String
   order       Int
+  isFree      Boolean        @default(false)
   courseId    Int
   course      Course         @relation(fields: [courseId], references: [id])
   progress    UserProgress[]

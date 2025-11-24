@@ -2,15 +2,26 @@
 
 import Link from "next/link";
 import { FaPlayCircle, FaLock } from "react-icons/fa";
+import { useEffect, useState } from "react";
 
-const lessons = [
-  { id: 1, title: "Introduction to HTML", isFree: true },
-  { id: 2, title: "HTML Tags and Elements", isFree: false },
-  { id: 3, title: "HTML Forms", isFree: false },
-  { id: 4, title: "Advanced HTML", isFree: false },
-];
+interface Lesson {
+  id: number;
+  title: string;
+  isFree: boolean;
+}
 
 export function Sidebar({ courseName }: { courseName: string }) {
+  const [lessons, setLessons] = useState<Lesson[]>([]);
+
+  useEffect(() => {
+    const fetchLessons = async () => {
+      const res = await fetch(`/api/courses/${courseName}/lessons`);
+      const data = await res.json();
+      setLessons(data);
+    };
+    fetchLessons();
+  }, [courseName]);
+
   return (
     <div className="w-full space-y-4 lg:w-1/4">
       <h2 className="text-xl font-bold">Lessons</h2>

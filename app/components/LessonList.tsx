@@ -2,6 +2,7 @@
 
 import { FaLock, FaPlayCircle } from "react-icons/fa";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 interface Lesson {
   id: number;
@@ -9,14 +10,18 @@ interface Lesson {
   isFree: boolean;
 }
 
-const lessons: Lesson[] = [
-  { id: 1, title: "Introduction to HTML", isFree: true },
-  { id: 2, title: "HTML Tags and Elements", isFree: false },
-  { id: 3, title: "HTML Forms", isFree: false },
-  { id: 4, title: "Advanced HTML", isFree: false },
-];
-
 export function LessonList({ courseName }: { courseName: string }) {
+  const [lessons, setLessons] = useState<Lesson[]>([]);
+
+  useEffect(() => {
+    const fetchLessons = async () => {
+      const res = await fetch(`/api/courses/${courseName}/lessons`);
+      const data = await res.json();
+      setLessons(data);
+    };
+    fetchLessons();
+  }, [courseName]);
+
   return (
     <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
       <h1 className="mb-8 text-3xl font-extrabold capitalize text-gray-900 dark:text-gray-100">
