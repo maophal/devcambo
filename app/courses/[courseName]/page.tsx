@@ -1,12 +1,9 @@
 "use client";
 
 import { LessonList } from "@/app/components/LessonList";
-
-export default function CoursePage({
-  params,
-}: {
-  params: { courseName: string };
-}) {
+import { useParams } from "next/navigation";
+export default function CoursePage() {
+  const params:{courseName: string}  = useParams();
   return (
     <div>
       <LessonList courseName={params.courseName} />
