@@ -5,13 +5,22 @@ import { LanguageSwitcher } from "./LanguageSwitcher";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
+import { FaUserCircle } from "react-icons/fa"; // Import user icon
 
 export function Header() {
   const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true); // Dummy state for now
+  const [userName, setUserName] = useState("John Doe"); // Dummy user name
+  const [userId, setUserId] = useState(1); // Dummy user id
 
   useEffect(() => {
     setMounted(true);
+    // In a real app, you would check auth status here
+    // For example, from localStorage, a cookie, or an auth context
+    // setIsLoggedIn(checkAuthStatus());
+    // setUserName(getUserName());
+    // setUserId(getUserId());
   }, []);
 
   return (
@@ -36,14 +45,23 @@ export function Header() {
           <nav className="flex items-center gap-4">
             <LanguageSwitcher />
             <ThemeSwitcher />
-            <Link
-              href="/login"
-              className={`rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 ${
-                mounted ? "dark:bg-blue-700 dark:hover:bg-blue-800" : ""
-              }`}
-            >
-              {t("login")}
-            </Link>
+            {isLoggedIn ? (
+              <Link href={`/users/${userId}`} className="flex items-center gap-2">
+                <FaUserCircle className="h-8 w-8 text-gray-700 dark:text-gray-300" />
+                <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                  {userName}
+                </span>
+              </Link>
+            ) : (
+              <Link
+                href="/login"
+                className={`rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 ${
+                  mounted ? "dark:bg-blue-700 dark:hover:bg-blue-800" : ""
+                }`}
+              >
+                {t("login")}
+              </Link>
+            )}
           </nav>
         </div>
       </div>
