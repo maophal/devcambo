@@ -7,7 +7,7 @@ generator client {
 }
 
 model User {
-  id            String         @id @default(cuid())
+  id            Int            @id @default(autoincrement())
   email         String         @unique
   password      String
   role          Role           @default(STUDENT)
@@ -20,19 +20,19 @@ model User {
 }
 
 model Profile {
-  id        String   @id @default(cuid())
+  id        Int      @id @default(autoincrement())
   name      String?
   avatarUrl String?
-  userId    String   @unique
+  userId    Int      @unique
   user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Subscription {
-  id        String   @id @default(cuid())
-  userId    String
-  planId    String
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  planId    Int
   status    SubscriptionStatus @default(ACTIVE)
   startDate DateTime @default(now())
   endDate   DateTime?
@@ -43,7 +43,7 @@ model Subscription {
 }
 
 model Plan {
-  id           String         @id @default(cuid())
+  id           Int            @id @default(autoincrement())
   name         String         @unique
   price        Float
   description  String?
@@ -53,21 +53,21 @@ model Plan {
 }
 
 model Course {
-  id          String       @id @default(cuid())
+  id          Int          @id @default(autoincrement())
   title       String
   description String?
   lessons     Lesson[]
   enrollments Enrollment[]
   createdAt   DateTime     @default(now())
-  updatedAt   DateTime       @updatedAt
+  updatedAt   DateTime     @updatedAt
 }
 
 model Lesson {
-  id          String         @id @default(cuid())
+  id          Int            @id @default(autoincrement())
   title       String
   content     String
   order       Int
-  courseId    String
+  courseId    Int
   course      Course         @relation(fields: [courseId], references: [id])
   progress    UserProgress[]
   createdAt   DateTime       @default(now())
@@ -75,9 +75,9 @@ model Lesson {
 }
 
 model Enrollment {
-  id        String   @id @default(cuid())
-  userId    String
-  courseId  String
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  courseId  Int
   user      User     @relation(fields: [userId], references: [id])
   course    Course   @relation(fields: [courseId], references: [id])
   createdAt DateTime @default(now())
@@ -87,9 +87,9 @@ model Enrollment {
 }
 
 model UserProgress {
-  id        String   @id @default(cuid())
-  userId    String
-  lessonId  String
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  lessonId  Int
   completed Boolean  @default(false)
   user      User     @relation(fields: [userId], references: [id])
   lesson    Lesson   @relation(fields: [lessonId], references: [id])
