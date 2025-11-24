@@ -8,17 +8,18 @@ generator client {
 }
 
 model User {
-  id            Int            @id @default(autoincrement())
-  name          String?
-  avatarUrl     String?
-  email         String         @unique
-  password      String
-  role          Role           @default(STUDENT)
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  subscriptions Subscription[]
-  enrollments   Enrollment[]
-  progress      UserProgress[]
+  id                 Int                  @id @default(autoincrement())
+  name               String?
+  avatarUrl          String?
+  email              String               @unique
+  password           String
+  role               Role                 @default(STUDENT)
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  subscriptions      Subscription[]
+  enrollments        Enrollment[]
+  progress           UserProgress[]
+  UserQuizProgress   UserQuizProgress[]
 }
 
 model Subscription {
@@ -63,6 +64,7 @@ model Lesson {
   courseId    Int
   course      Course         @relation(fields: [courseId], references: [id])
   progress    UserProgress[]
+  quiz        Quiz?
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
 }
@@ -90,6 +92,51 @@ model UserProgress {
   updatedAt DateTime @updatedAt
 
   @@unique([userId, lessonId])
+}
+
+model Quiz {
+  id                 Int                  @id @default(autoincrement())
+  title              String
+  lessonId           Int                  @unique
+  lesson             Lesson               @relation(fields: [lessonId], references: [id])
+  questions          Question[]
+  UserQuizProgress   UserQuizProgress[]
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+}
+
+model Question {
+  id        Int      @id @default(autoincrement())
+  text      String
+  quizId    Int
+  quiz      Quiz     @relation(fields: [quizId], references: [id])
+  answers   Answer[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Answer {
+  id         Int      @id @default(autoincrement())
+  text       String
+  isCorrect  Boolean
+  questionId Int
+  question   Question @relation(fields: [questionId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model UserQuizProgress {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  quizId    Int
+  completed Boolean  @default(false)
+  score     Int
+  user      User     @relation(fields: [userId], references: [id])
+  quiz      Quiz     @relation(fields: [quizId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, quizId])
 }
 
 enum Role {
