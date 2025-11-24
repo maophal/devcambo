@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslation } from "react-i18next";
+import { CourseMenu } from "./components/CourseMenu";
 
 export default function Home() {
   const { t } = useTranslation();
@@ -15,6 +16,7 @@ export default function Home() {
           {t("learn_web_development")}
         </p>
       </div>
+      <CourseMenu />
     </section>
   );
 }
