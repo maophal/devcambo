@@ -4,37 +4,104 @@ import { LiveCodeEditor } from "@/app/components/LiveCodeEditor";
 import { Quiz } from "@/app/components/Quiz";
 import { Sidebar } from "@/app/components/Sidebar";
 import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { FaBook, FaCode, FaQuestionCircle } from "react-icons/fa";
+
+interface Lesson {
+  title: string;
+  content: string;
+}
+
 export default function LessonPage() {
   const params = useParams() as { courseName: string; lessonId: string };
+  const [lesson, setLesson] = useState<Lesson | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (params.courseName && params.lessonId) {
+      const fetchLesson = async () => {
+        try {
+          const res = await fetch(
+            `/api/courses/${params.courseName}/${params.lessonId}`
+          );
+          if (!res.ok) {
+            throw new Error("Failed to fetch lesson");
+          }
+          const data = await res.json();
+          setLesson(data);
+        } catch (err) {
+          setError(err.message);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchLesson();
+    }
+  }, [params.courseName, params.lessonId]);
+
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-gray-100 dark:bg-gray-900">
+        <div className="text-2xl font-semibold text-gray-700 dark:text-gray-300">
+          Loading...
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-gray-100 dark:bg-gray-900">
+        <div className="text-2xl font-semibold text-red-500">Error: {error}</div>
+      </div>
+    );
+  }
+
   return (
-    <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
-      <div className="flex flex-col gap-8 lg:flex-row">
-        <Sidebar courseName={params.courseName} />
-        <div className="w-full lg:w-3/4">
-          <div className="prose max-w-none dark:prose-invert">
-            <h1 className="mb-4 text-3xl font-extrabold capitalize text-gray-900 dark:text-gray-100">
-              {params.courseName} - Lesson {params.lessonId}
-            </h1>
-            <h2 className="mb-4 text-2xl font-bold">
-              Introduction to HTML
-            </h2>
-            <p className="mb-8 text-lg text-gray-500">
-              In this lesson, you will learn the basics of HTML, the standard markup language for creating web pages.
-            </p>
-            <p>
-              HTML (HyperText Markup Language) is the most basic building block of the Web. It defines the meaning and structure of web content. Other technologies besides HTML are generally used to describe a web page's appearance/presentation (CSS) or functionality/behavior (JavaScript).
-            </p>
-            <p>
-              "Hypertext" refers to links that connect web pages to one another, either within a single website or between websites. Links are a fundamental aspect of the Web. By uploading content to the Internet and linking it to pages created by other people, you become an active participant in the World Wide Web.
-            </p>
-          </div>
-          <div className="mt-8 space-y-8">
-            <div>
-              <h2 className="mb-4 text-2xl font-bold">Live Code Editor</h2>
-              <LiveCodeEditor />
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+      <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col gap-8 lg:flex-row">
+          <Sidebar courseName={params.courseName} />
+          <div className="w-full lg:w-3/4 space-y-8">
+            {/* Lesson Header */}
+            <div className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
+              <h1 className="capitalize text-3xl font-extrabold text-gray-900 dark:text-gray-100">
+                {params.courseName} - Lesson {params.lessonId}
+              </h1>
+              <h2 className="mt-2 text-2xl font-bold text-gray-700 dark:text-gray-300">
+                {lesson?.title}
+              </h2>
             </div>
-            <div>
-              <h2 className="mb-4 text-2xl font-bold">Quick Exercise</h2>
+
+            {/* Lesson Content */}
+            <div className="prose max-w-none rounded-lg bg-white p-6 shadow-lg dark:prose-invert dark:bg-gray-800">
+              <div className="flex items-center gap-2 text-xl font-semibold text-gray-800 dark:text-gray-200">
+                <FaBook />
+                <span>Lesson Content</span>
+              </div>
+              <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
+                {lesson?.content}
+              </p>
+            </div>
+
+            {/* Live Code Editor */}
+            <div className="rounded-lg bg-white shadow-lg dark:bg-gray-800">
+              <div className="flex items-center gap-2 p-6 text-xl font-semibold text-gray-800 dark:text-gray-200">
+                <FaCode />
+                <span>Live Code Editor</span>
+              </div>
+              <div className="p-6 pt-0">
+                <LiveCodeEditor />
+              </div>
+            </div>
+
+            {/* Quiz */}
+            <div className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
+              <div className="flex items-center gap-2 text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
+                <FaQuestionCircle />
+                <span>Quick Exercise</span>
+              </div>
               <Quiz />
             </div>
           </div>
