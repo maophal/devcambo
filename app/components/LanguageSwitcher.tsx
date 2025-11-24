@@ -7,43 +7,35 @@ import Link from "next/link";
 export function LanguageSwitcher() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState("English");
 
   const languages = [
-    { code: "en", name: "English" },
-    { code: "km", name: "Khmer" },
+    { code: "en", name: "English", flag: "🇬🇧" },
+    { code: "km", name: "Khmer", flag: "🇰🇭" },
   ];
+
+  // Determine the currently selected language based on the URL locale
+  const currentLocale = pathname.split('/')[1]; // Extracts "en" or "km" from "/en/page" or "/km/page"
+  const selectedLanguage = languages.find(lang => lang.code === currentLocale) || languages[0];
+
 
   return (
     <div className="relative inline-block text-left">
       <div>
         <button
           type="button"
-          className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+          className="rounded-full p-2 hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center justify-center gap-1"
           id="menu-button"
           aria-expanded="true"
           aria-haspopup="true"
           onClick={() => setIsOpen(!isOpen)}
         >
-          {selectedLanguage}
-          <svg
-            className="-mr-1 h-5 w-5 text-gray-400"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            aria-hidden="true"
-          >
-            <path
-              fillRule="evenodd"
-              d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-              clipRule="evenodd"
-            />
-          </svg>
+          <span className="text-xl">{selectedLanguage.flag}</span>
         </button>
       </div>
 
       {isOpen && (
         <div
-          className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+          className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-gray-800 dark:ring-gray-700"
           role="menu"
           aria-orientation="vertical"
           aria-labelledby="menu-button"
@@ -54,15 +46,14 @@ export function LanguageSwitcher() {
                 key={language.code}
                 href={pathname}
                 locale={language.code}
-                className="block px-4 py-2 text-sm text-gray-700"
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700 flex items-center gap-2"
                 role="menuitem"
                 id={`menu-item-${language.code}`}
                 onClick={() => {
-                  setSelectedLanguage(language.name);
                   setIsOpen(false);
                 }}
               >
-                {language.name}
+                <span className="text-xl">{language.flag}</span> {language.name}
               </Link>
             ))}
           </div>

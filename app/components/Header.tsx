@@ -16,7 +16,7 @@ export function Header() {
 
   return (
     <header
-      className={`border-b bg-white ${
+      className={`border-b border-gray-200 bg-gray-100 ${
         mounted ? "dark:bg-gray-900 dark:border-gray-700" : ""
       }`}
     >
@@ -24,7 +24,7 @@ export function Header() {
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-2">
             <span
-              className={`font-bold text-gray-900 ${
+              className={`font-mono text-lg font-bold text-gray-900 ${
                 mounted ? "dark:text-gray-100" : ""
               }`}
             >
@@ -38,8 +38,8 @@ export function Header() {
             <ThemeSwitcher />
             <Link
               href="/login"
-              className={`text-sm font-medium text-gray-500 transition-colors hover:text-gray-900 ${
-                mounted ? "dark:text-gray-400 dark:hover:text-gray-100" : ""
+              className={`rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 ${
+                mounted ? "dark:bg-blue-700 dark:hover:bg-blue-800" : ""
               }`}
             >
               {t("login")}
