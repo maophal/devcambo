@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useTranslation } from "react-i18next";
+import Link from "next/link";
 
-export default function LoginPage() {
+export default function SignupPage() {
   const { t } = useTranslation();
 
   return (
@@ -11,11 +11,23 @@ export default function LoginPage() {
       <div className="w-[400px] rounded-lg border border-gray-700 bg-gray-800 p-8">
         <div className="mb-4">
           <span className="text-pink-500">function</span>{" "}
-          <span className="text-yellow-400">login</span>
+          <span className="text-yellow-400">signUp</span>
           <span className="text-gray-400">()</span>{" "}
           <span className="text-gray-400">&#123;</span>
         </div>
         <div className="ml-4 grid gap-4">
+          <div className="grid gap-2">
+            <label htmlFor="username" className="text-blue-400">
+              <span className="text-pink-500">const</span> username{" "}
+              <span className="text-pink-500">=</span>
+            </label>
+            <input
+              id="username"
+              type="text"
+              placeholder="'your_username'"
+              className="rounded-md border border-gray-700 bg-gray-900 px-3 py-2 text-green-400"
+            />
+          </div>
           <div className="grid gap-2">
             <label htmlFor="email" className="text-blue-400">
               <span className="text-pink-500">const</span> email{" "}
@@ -45,13 +57,13 @@ export default function LoginPage() {
             type="submit"
             className="w-full rounded-md bg-yellow-400 py-2 text-gray-900 hover:bg-yellow-500"
           >
-            {t("login")}
+            {t("sign_up")}
             <span className="text-gray-900">()</span>
           </button>
           <div className="text-center text-sm text-gray-400">
-            <span className="text-gray-500">// {t("dont_have_account")}</span>{" "}
-            <Link href={"/signup"} className="text-blue-400 underline">
-              {t("sign_up")}
+            <span className="text-gray-500">// Already have an account?</span>{" "}
+            <Link href="/login" className="text-blue-400 underline">
+              {t("login")}
             </Link>
           </div>
         </div>

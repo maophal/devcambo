@@ -1,27 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 export function LanguageSwitcher() {
-  const { i18n, t } = useTranslation();
-  const router = useRouter();
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState(
-    i18n.language === "en" ? t("english") : t("khmer")
-  );
+  const [selectedLanguage, setSelectedLanguage] = useState("English");
 
   const languages = [
-    { code: "en", name: t("english") },
-    { code: "km", name: t("khmer") },
+    { code: "en", name: "English" },
+    { code: "km", name: "Khmer" },
   ];
-
-  const handleLanguageChange = (language: { code: string; name: string }) => {
-    setSelectedLanguage(language.name);
-    i18n.changeLanguage(language.code);
-    setIsOpen(false);
-  };
 
   return (
     <div className="relative inline-block text-left">
@@ -59,16 +50,20 @@ export function LanguageSwitcher() {
         >
           <div className="py-1" role="none">
             {languages.map((language) => (
-              <a
+              <Link
                 key={language.code}
-                href="#"
+                href={pathname}
+                locale={language.code}
                 className="block px-4 py-2 text-sm text-gray-700"
                 role="menuitem"
                 id={`menu-item-${language.code}`}
-                onClick={() => handleLanguageChange(language)}
+                onClick={() => {
+                  setSelectedLanguage(language.name);
+                  setIsOpen(false);
+                }}
               >
                 {language.name}
-              </a>
+              </Link>
             ))}
           </div>
         </div>
