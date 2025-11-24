@@ -3,12 +3,9 @@
 import { LiveCodeEditor } from "@/app/components/LiveCodeEditor";
 import { Quiz } from "@/app/components/Quiz";
 import { Sidebar } from "@/app/components/Sidebar";
-
-export default function LessonPage({
-  params,
-}: {
-  params: { courseName: string; lessonId: string };
-}) {
+import { useParams } from "next/navigation";
+export default function LessonPage() {
+  const params = useParams() as { courseName: string; lessonId: string };
   return (
     <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
       <div className="flex flex-col gap-8 lg:flex-row">
