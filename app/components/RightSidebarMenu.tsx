@@ -59,7 +59,7 @@ export function RightSidebarMenu() {
         }`}
       >
         <div className="flex justify-between items-center bg-gray-900 p-4"> {/* Changed background here */}
-          <h2 className="text-xl font-bold">Courses</h2>
+          {/* <h2 className="text-xl font-bold">Courses</h2> */}
           <button onClick={() => setIsOpen(false)} className="text-white hover:text-gray-300">
             <FaTimes />
           </button>
