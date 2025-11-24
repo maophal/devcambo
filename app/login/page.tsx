@@ -2,13 +2,45 @@
 
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const { t } = useTranslation();
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+
+    const res = await fetch("/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (res.ok) {
+      const { token } = await res.json();
+      // In a real app, you would store the token in localStorage or a cookie
+      console.log("token", token);
+      router.push("/");
+    } else {
+      const data = await res.json();
+      setError(data.error);
+    }
+  };
 
   return (
     <div className="flex h-full items-center justify-center bg-gray-900 py-12 font-mono text-white">
-      <div className="w-[400px] rounded-lg border border-gray-700 bg-gray-800 p-8">
+      <form
+        onSubmit={handleSubmit}
+        className="w-[400px] rounded-lg border border-gray-700 bg-gray-800 p-8"
+      >
         <div className="mb-4">
           <span className="text-pink-500">function</span>{" "}
           <span className="text-yellow-400">login</span>
@@ -26,6 +58,8 @@ export default function LoginPage() {
               type="email"
               placeholder="'your@email.com'"
               className="rounded-md border border-gray-700 bg-gray-900 px-3 py-2 text-green-400"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="grid gap-2">
@@ -39,8 +73,11 @@ export default function LoginPage() {
               type="password"
               placeholder="'your_password'"
               className="rounded-md border border-gray-700 bg-gray-900 px-3 py-2 text-green-400"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
+          {error && <p className="text-red-500">{error}</p>}
           <button
             type="submit"
             className="w-full rounded-md bg-yellow-400 py-2 text-gray-900 hover:bg-yellow-500"
@@ -58,7 +95,7 @@ export default function LoginPage() {
         <div className="mt-4">
           <span className="text-gray-400">&#125;</span>
         </div>
-      </div>
+      </form>
     </div>
   );
 }
