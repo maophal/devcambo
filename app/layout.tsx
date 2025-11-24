@@ -34,7 +34,7 @@ export default function RootLayout({
         <I18nProvider locale={params.locale} namespaces={["common"]}>
           <div className="flex min-h-screen flex-col">
             <Header />
-            <main className="flex-1">{children}</main>
+            <main className="flex-1 bg-gray-900">{children}</main>
             <Footer />
           </div>
         </I18nProvider>
