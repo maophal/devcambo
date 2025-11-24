@@ -1,0 +1,15 @@
+{
+  "login": "ចូល",
+  "email": "អ៊ីមែល",
+  "password": "ពាក្យសម្ងាត់",
+  "forgot_password": "ភ្លេចពាក្យសម្ងាត់?",
+  "login_with_google": "ចូលដោយប្រើ Google",
+  "dont_have_account": "មិនទាន់មានគណនី?",
+  "sign_up": "ចុះឈ្មោះ",
+  "enter_email_below": "បញ្ចូលអ៊ីមែលរបស់អ្នកខាងក្រោមដើម្បីចូលគណនីរបស់អ្នក",
+  "app_name": "DevCambo",
+  "a_learning_platform": "វេទិកាសិក្សាសម្រាប់ការអភិវឌ្ឍន៍គេហទំព័រ។",
+  "learn_web_development": "រៀនការអភិវឌ្ឍន៍គេហទំព័រពីដំបូង។",
+  "khmer": "ខ្មែរ",
+  "english": "អង់គ្លេស"
+}
