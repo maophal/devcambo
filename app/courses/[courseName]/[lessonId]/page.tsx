@@ -99,9 +99,10 @@ function LessonPage() {
                 <FaBook />
                 <span>Lesson Content</span>
               </div>
-              <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
-                {lesson?.content}
-              </p>
+              <div
+                className="mt-4 text-lg text-gray-600 dark:text-gray-400"
+                dangerouslySetInnerHTML={{ __html: lesson?.content || "" }}
+              />
             </div>
 
             {/* Live Code Editor */}
