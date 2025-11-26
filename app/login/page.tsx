@@ -27,8 +27,8 @@ export default function LoginPage() {
     });
 
     if (res.ok) {
-      const { token, userId, userName } = await res.json();
-      login(token, { id: userId, name: userName });
+      const { token, userId, userName, isPaid } = await res.json();
+      login(token, { id: userId, name: userName, isPaid });
       router.push("/");
     } else {
       const data = await res.json();

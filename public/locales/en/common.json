@@ -12,5 +12,13 @@
   "a_learning_platform": "A learning platform for web developers.",
   "learn_web_development": "Learn web development from the ground up.",
   "khmer": "Khmer",
-  "english": "English"
+  "english": "English",
+  "pricing_title": "Choose your plan",
+  "pricing_description": "Unlock all lessons and features by upgrading to Pro.",
+  "free_plan": "Free",
+  "free_plan_description": "Access to the first lesson of each course.",
+  "current_plan": "Current Plan",
+  "pro_plan": "Pro",
+  "pro_plan_description": "Access to all lessons, quizzes, and live code editor.",
+  "upgrade_to_pro": "Upgrade to Pro"
 }

@@ -14,6 +14,9 @@ export async function POST(req: Request) {
     where: {
       email,
     },
+    include: {
+      subscriptions: true,
+    },
   });
 
   if (!user) {
@@ -30,9 +33,14 @@ export async function POST(req: Request) {
     expiresIn: "1d",
   });
 
+  const isPaid = user.subscriptions.some(
+    (sub) => sub.status === "ACTIVE" || sub.status === "TRIALING"
+  );
+
   return NextResponse.json({
     token,
     userId: user.id,
     userName: user.name,
+    isPaid,
   });
 }

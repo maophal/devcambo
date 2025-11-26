@@ -32,6 +32,15 @@ async function main() {
   await prisma.quiz.deleteMany({});
   await prisma.lesson.deleteMany({});
   await prisma.course.deleteMany({});
+  await prisma.plan.deleteMany({});
+
+  await prisma.plan.create({
+    data: {
+      name: 'Pro',
+      price: 10,
+      description: 'Access to all lessons, quizzes, and live code editor.',
+    },
+  });
 
   const courses = [
     { name: 'html', description: 'Learn the fundamentals of HTML, the standard markup language for creating web pages.' },
