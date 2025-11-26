@@ -126,22 +126,29 @@ function LessonPage({ user }: { user: any }) {
   return (
     <div className="w-full lg:w-3/4 space-y-8">
       <div className="flex justify-between">
-        {prevLesson && (
-          <Link
-            href={`/courses/${params.courseName}/${prevLesson.id}`}
-            className="rounded-md bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
-          >
-            Previous
-          </Link>
-        )}
-        {nextLesson && (
-          <Link
-            href={`/courses/${params.courseName}/${nextLesson.id}`}
-            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
-          >
-            Next
-          </Link>
-        )}
+        <Link
+          href={prevLesson ? `/courses/${params.courseName}/${prevLesson.id}` : "#"}
+          className={`rounded-md bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 transition-colors dark:bg-gray-700 dark:text-gray-300 ${
+            prevLesson
+              ? "hover:bg-gray-300 dark:hover:bg-gray-600"
+              : "cursor-not-allowed opacity-50"
+          }`}
+          aria-disabled={!prevLesson}
+          tabIndex={prevLesson ? 0 : -1}
+        >
+          Previous
+        </Link>
+
+        <Link
+          href={nextLesson ? `/courses/${params.courseName}/${nextLesson.id}` : "#"}
+          className={`rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors ${
+            nextLesson ? "hover:bg-blue-700" : "cursor-not-allowed opacity-50"
+          }`}
+          aria-disabled={!nextLesson}
+          tabIndex={nextLesson ? 0 : -1}
+        >
+          Next
+        </Link>
       </div>
       {/* Lesson Header */}
       <div className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
