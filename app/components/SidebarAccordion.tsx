@@ -112,11 +112,11 @@ const SidebarAccordionComponent = ({
                 <span>{lesson.title}</span>
               </div>
               <button className="p-1">
-                {isActive ? (
-                  <FaChevronDown className="h-4 w-4" />
-                ) : (
-                  <FaChevronRight className="h-4 w-4" />
-                )}
+                <FaChevronRight
+                  className={`h-4 w-4 transition-transform duration-300 ease-in-out ${
+                    isActive ? "rotate-90" : ""
+                  }`}
+                />
               </button>
             </div>
             <div
