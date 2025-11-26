@@ -4,30 +4,15 @@ import Link from "next/link";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import { useTranslation } from "react-i18next";
-import { useEffect, useState } from "react";
 import { FaUserCircle } from "react-icons/fa"; // Import user icon
 import { useRouter } from "next/navigation";
+import { useAuth } from "../contexts/AuthContext";
+import { HeaderSkeleton } from "./HeaderSkeleton";
 
 export function Header() {
   const { t } = useTranslation();
   const router = useRouter();
-  const [mounted, setMounted] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName, setUserName] = useState<string | null>(null);
-  const [userId, setUserId] = useState<string | null>(null);
-
-  useEffect(() => {
-    setMounted(true);
-    const token = localStorage.getItem("token");
-    const storedUserId = localStorage.getItem("userId");
-    const storedUserName = localStorage.getItem("userName");
-
-    if (token && storedUserId && storedUserName) {
-      setIsLoggedIn(true);
-      setUserId(storedUserId);
-      setUserName(storedUserName);
-    }
-  }, []);
+  const { isLoggedIn, user, loading, logout } = useAuth();
 
   const handleLogout = async () => {
     try {
@@ -35,29 +20,24 @@ export function Header() {
         method: "POST",
       });
     } finally {
-      localStorage.removeItem("token");
-      localStorage.removeItem("userId");
-      localStorage.removeItem("userName");
-      setIsLoggedIn(false);
-      setUserName(null);
-      setUserId(null);
+      logout();
       router.push("/login");
     }
   };
 
+  if (loading) {
+    return <HeaderSkeleton />;
+  }
+
   return (
     <header
-      className={`border-b border-gray-200 bg-gray-100 ${
-        mounted ? "dark:bg-gray-900 dark:border-gray-700" : ""
-      }`}
+      className="border-b border-gray-200 bg-gray-100 dark:bg-gray-900 dark:border-gray-700"
     >
       <div className="container mx-auto flex h-16 items-center justify-between">
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-2">
             <span
-              className={`font-mono text-lg font-bold text-gray-900 ${
-                mounted ? "dark:text-gray-100" : ""
-              }`}
+              className="font-mono text-lg font-bold text-gray-900 dark:text-gray-100"
             >
               {t("app_name")}
             </span>
@@ -67,19 +47,17 @@ export function Header() {
           <nav className="flex items-center gap-4">
             <LanguageSwitcher />
             <ThemeSwitcher />
-            {isLoggedIn && userId ? (
+            {isLoggedIn && user ? (
               <>
-                <Link href={`/users/${userId}`} className="flex items-center gap-2">
+                <Link href={`/users/${user.id}`} className="flex items-center gap-2">
                   <FaUserCircle className="h-8 w-8 text-gray-700 dark:text-gray-300" />
                   <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                    {userName}
+                    {user.name}
                   </span>
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className={`rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700 ${
-                    mounted ? "dark:bg-red-700 dark:hover:bg-red-800" : ""
-                  }`}
+                  className="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800"
                 >
                   {t("logout")}
                 </button>
@@ -87,9 +65,7 @@ export function Header() {
             ) : (
               <Link
                 href="/login"
-                className={`rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 ${
-                  mounted ? "dark:bg-blue-700 dark:hover:bg-blue-800" : ""
-                }`}
+                className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800"
               >
                 {t("login")}
               </Link>

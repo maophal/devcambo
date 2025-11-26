@@ -4,10 +4,12 @@ import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function LoginPage() {
   const { t } = useTranslation();
   const router = useRouter();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -26,9 +28,7 @@ export default function LoginPage() {
 
     if (res.ok) {
       const { token, userId, userName } = await res.json();
-      localStorage.setItem("token", token);
-      localStorage.setItem("userId", userId);
-      localStorage.setItem("userName", userName);
+      login(token, { id: userId, name: userName });
       router.push("/");
     } else {
       const data = await res.json();
