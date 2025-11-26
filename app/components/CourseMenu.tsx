@@ -13,8 +13,8 @@ import {
   SiPostgresql,
   SiMysql,
 } from "react-icons/si";
-import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const iconMap: { [key: string]: React.ReactElement } = {
   html: <FaHtml5 className="h-12 w-12 text-red-500" />,
@@ -36,6 +36,7 @@ interface Course {
 
 export function CourseMenu() {
   const [courses, setCourses] = useState<Course[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -46,20 +47,28 @@ export function CourseMenu() {
     fetchCourses();
   }, []);
 
+  const handleCourseClick = async (courseTitle: string) => {
+    const res = await fetch(`/api/courses/${courseTitle.toLowerCase()}/first-lesson`);
+    const firstLesson = await res.json();
+    if (firstLesson) {
+      router.push(`/courses/${courseTitle.toLowerCase()}/${firstLesson.id}`);
+    }
+  };
+
   return (
     <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
       <div className="grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-4">
         {courses.map((course) => (
-          <Link
-            href={`/courses/${course.title.toLowerCase()}`}
+          <div
             key={course.id}
-            className="flex flex-col items-center justify-center rounded-lg bg-gray-100 p-8 shadow-lg transition-transform duration-300 hover:scale-105 dark:bg-gray-800"
+            className="flex flex-col items-center justify-center rounded-lg bg-gray-100 p-8 shadow-lg transition-transform duration-300 hover:scale-105 dark:bg-gray-800 cursor-pointer"
+            onClick={() => handleCourseClick(course.title)}
           >
             {iconMap[course.title.toLowerCase()]}
             <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-gray-100">
               {course.title}
             </h3>
-          </Link>
+          </div>
         ))}
       </div>
     </div>

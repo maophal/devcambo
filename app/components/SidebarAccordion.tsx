@@ -20,7 +20,11 @@ interface Lesson {
   parentId: number | null;
 }
 
-const SidebarAccordionComponent = ({ courseName }: { courseName: string }) => {
+interface SidebarAccordionProps {
+  courseName: string;
+}
+
+const SidebarAccordionComponent = ({ courseName }: SidebarAccordionProps) => {
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [activeLesson, setActiveLesson] = useState<number | null>(null);
   const { user } = useAuth();
@@ -32,9 +36,25 @@ const SidebarAccordionComponent = ({ courseName }: { courseName: string }) => {
       const res = await fetch(`/api/courses/${courseName}/lessons`);
       const data = await res.json();
       setLessons(data);
+
+      // Determine initial active lesson
+      if (currentLessonId && data.length > 0) {
+        const currentLesson = data.find(
+          (lesson: Lesson) => lesson.id === currentLessonId
+        );
+        if (currentLesson) {
+          // If the current lesson has a parent, activate the parent
+          if (currentLesson.parentId) {
+            setActiveLesson(currentLesson.parentId);
+          } else {
+            // Otherwise, activate the current lesson itself
+            setActiveLesson(currentLesson.id);
+          }
+        }
+      }
     };
     fetchLessons();
-  }, [courseName, user]);
+  }, [courseName, user, currentLessonId]); // Add currentLessonId to dependencies
 
   const topLevelLessons = lessons.filter((lesson) => lesson.level === 0);
 
