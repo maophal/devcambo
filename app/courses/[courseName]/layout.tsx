@@ -1,6 +1,7 @@
 "use client";
 
 import { Sidebar } from "@/app/components/Sidebar";
+import { useAuth } from "@/app/contexts/AuthContext";
 import { useParams } from "next/navigation";
 
 export default function CourseLayout({
@@ -9,11 +10,12 @@ export default function CourseLayout({
   children: React.ReactNode;
 }) {
   const params = useParams() as { courseName: string };
+  const { user } = useAuth();
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
       <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-8 lg:flex-row">
-          <Sidebar courseName={params.courseName} />
+          <Sidebar courseName={params.courseName} user={user} />
           {children}
         </div>
       </div>

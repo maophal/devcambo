@@ -22,12 +22,15 @@ interface Lesson {
 
 interface SidebarAccordionProps {
   courseName: string;
+  user: any;
 }
 
-const SidebarAccordionComponent = ({ courseName }: SidebarAccordionProps) => {
+const SidebarAccordionComponent = ({
+  courseName,
+  user,
+}: SidebarAccordionProps) => {
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [activeLesson, setActiveLesson] = useState<number | null>(null);
-  const { user } = useAuth();
   const params = useParams() as { courseName: string; lessonId: string };
   const currentLessonId = parseInt(params.lessonId);
 
@@ -54,7 +57,7 @@ const SidebarAccordionComponent = ({ courseName }: SidebarAccordionProps) => {
       }
     };
     fetchLessons();
-  }, [courseName, user, currentLessonId]); // Add currentLessonId to dependencies
+  }, [courseName, currentLessonId]); // remove user from dependencies
 
   const topLevelLessons = lessons.filter((lesson) => lesson.level === 0);
 

@@ -9,7 +9,7 @@ export function withAuth<P extends object>(
   WrappedComponent: React.ComponentType<P>
 ) {
   const WithAuth: React.FC<P> = (props) => {
-    const { isLoggedIn, loading } = useAuth();
+    const { user, isLoggedIn, loading } = useAuth(); // Get user from useAuth
     const router = useRouter();
 
     useEffect(() => {
@@ -26,7 +26,8 @@ export function withAuth<P extends object>(
       return null;
     }
 
-    return <WrappedComponent {...props} />;
+    // Pass user as a prop
+    return <WrappedComponent {...props} user={user} />;
   };
 
   return WithAuth;
