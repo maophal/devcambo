@@ -86,10 +86,6 @@ function LessonPage({ user }: { user: any }) {
 
       {/* Lesson Content */}
       <div className="prose max-w-none rounded-lg bg-white p-6 shadow-lg dark:prose-invert dark:bg-gray-800">
-        <div className="flex items-center gap-2 text-xl font-semibold text-gray-800 dark:text-gray-200">
-          <FaBook />
-          <span>Lesson Content</span>
-        </div>
         <div
           className="mt-4 text-lg text-gray-600 dark:text-gray-400"
           dangerouslySetInnerHTML={{ __html: lesson?.content || "" }}
