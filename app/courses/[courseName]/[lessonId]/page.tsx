@@ -3,6 +3,7 @@
 import { LiveCodeEditor } from "@/app/components/LiveCodeEditor";
 import { Quiz } from "@/app/components/Quiz";
 import { Sidebar } from "@/app/components/Sidebar";
+import { withAuth } from "@/app/components/withAuth";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaBook, FaCode, FaQuestionCircle } from "react-icons/fa";
@@ -12,10 +13,9 @@ interface Lesson {
   content: string;
 }
 
-export default function LessonPage() {
+function LessonPage() {
   const params = useParams() as { courseName: string; lessonId: string };
   const [lesson, setLesson] = useState<Lesson | null>(null);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -32,23 +32,11 @@ export default function LessonPage() {
           setLesson(data);
         } catch (err) {
           setError(err.message);
-        } finally {
-          setLoading(false);
         }
       };
       fetchLesson();
     }
   }, [params.courseName, params.lessonId]);
-
-  if (loading) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-gray-100 dark:bg-gray-900">
-        <div className="text-2xl font-semibold text-gray-700 dark:text-gray-300">
-          Loading...
-        </div>
-      </div>
-    );
-  }
 
   if (error) {
     return (
@@ -110,3 +98,5 @@ export default function LessonPage() {
     </div>
   );
 }
+
+export default withAuth(LessonPage);

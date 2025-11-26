@@ -10,6 +10,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { UserProfileSkeleton } from "@/app/components/UserProfileSkeleton";
+import { withAuth } from "@/app/components/withAuth";
 
 interface Course {
   id: number;
@@ -62,10 +63,9 @@ function CourseCard({ course }: { course: Course }) {
   );
 }
 
-export default function UserPage() {
+function UserPage() {
   const params = useParams() as { userId: string };
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -80,17 +80,11 @@ export default function UserPage() {
           setUser(data);
         } catch (err) {
           setError(err.message);
-        } finally {
-          setLoading(false);
         }
       };
       fetchUser();
     }
   }, [params.userId]);
-
-  if (loading) {
-    return <UserProfileSkeleton />;
-  }
 
   if (error) {
     return (
@@ -169,3 +163,5 @@ export default function UserPage() {
     </div>
   );
 }
+
+export default withAuth(UserPage);

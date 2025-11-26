@@ -1,9 +1,10 @@
 "use client";
 
 import { LessonList } from "@/app/components/LessonList";
+import { withAuth } from "@/app/components/withAuth";
 import { useParams } from "next/navigation";
 
-export default function CoursePage() {
+function CoursePage() {
   const params = useParams() as { courseName: string };
   return (
     <div>
@@ -11,3 +12,5 @@ export default function CoursePage() {
     </div>
   );
 }
+
+export default withAuth(CoursePage);
