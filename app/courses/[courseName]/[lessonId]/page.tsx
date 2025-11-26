@@ -8,6 +8,7 @@ import { useAuth } from "@/app/contexts/AuthContext";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaBook, FaCode, FaQuestionCircle } from "react-icons/fa";
+import { LessonContentSkeleton } from "@/app/components/LessonContentSkeleton";
 
 interface Lesson {
   title: string;
@@ -25,6 +26,7 @@ function LessonPage() {
 
   useEffect(() => {
     if (params.courseName && params.lessonId) {
+      setLoading(true);
       const fetchLesson = async () => {
         try {
           const res = await fetch(
@@ -49,82 +51,70 @@ function LessonPage() {
     }
   }, [params.courseName, params.lessonId, user, router]);
 
-  if (loading) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-gray-100 dark:bg-gray-900">
-        <div className="text-2xl font-semibold text-gray-700 dark:text-gray-300">
-          Loading...
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-gray-100 dark:bg-gray-900">
-        <div className="text-2xl font-semibold text-red-500">Error: {error}</div>
-      </div>
-    );
-  }
-
-  if (!lesson) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-gray-100 dark:bg-gray-900">
-        <div className="text-2xl font-semibold text-gray-700 dark:text-gray-300">
-          Lesson not found.
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
       <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-8 lg:flex-row">
           <Sidebar courseName={params.courseName} />
-          <div className="w-full lg:w-3/4 space-y-8">
-            {/* Lesson Header */}
-            <div className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
-              <h1 className="capitalize text-3xl font-extrabold text-gray-900 dark:text-gray-100">
-                {params.courseName} - Lesson {params.lessonId}
-              </h1>
-              <h2 className="mt-2 text-2xl font-bold text-gray-700 dark:text-gray-300">
-                {lesson?.title}
-              </h2>
+          {loading ? (
+            <LessonContentSkeleton />
+          ) : error ? (
+            <div className="w-full lg:w-3/4 flex items-center justify-center">
+              <div className="text-2xl font-semibold text-red-500">
+                Error: {error}
+              </div>
             </div>
+          ) : !lesson ? (
+            <div className="w-full lg:w-3/4 flex items-center justify-center">
+              <div className="text-2xl font-semibold text-gray-700 dark:text-gray-300">
+                Lesson not found.
+              </div>
+            </div>
+          ) : (
+            <div className="w-full lg:w-3/4 space-y-8">
+              {/* Lesson Header */}
+              <div className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
+                <h1 className="capitalize text-3xl font-extrabold text-gray-900 dark:text-gray-100">
+                  {params.courseName} - Lesson {params.lessonId}
+                </h1>
+                <h2 className="mt-2 text-2xl font-bold text-gray-700 dark:text-gray-300">
+                  {lesson?.title}
+                </h2>
+              </div>
 
-            {/* Lesson Content */}
-            <div className="prose max-w-none rounded-lg bg-white p-6 shadow-lg dark:prose-invert dark:bg-gray-800">
-              <div className="flex items-center gap-2 text-xl font-semibold text-gray-800 dark:text-gray-200">
-                <FaBook />
-                <span>Lesson Content</span>
+              {/* Lesson Content */}
+              <div className="prose max-w-none rounded-lg bg-white p-6 shadow-lg dark:prose-invert dark:bg-gray-800">
+                <div className="flex items-center gap-2 text-xl font-semibold text-gray-800 dark:text-gray-200">
+                  <FaBook />
+                  <span>Lesson Content</span>
+                </div>
+                <div
+                  className="mt-4 text-lg text-gray-600 dark:text-gray-400"
+                  dangerouslySetInnerHTML={{ __html: lesson?.content || "" }}
+                />
               </div>
-              <div
-                className="mt-4 text-lg text-gray-600 dark:text-gray-400"
-                dangerouslySetInnerHTML={{ __html: lesson?.content || "" }}
-              />
-            </div>
 
-            {/* Live Code Editor */}
-            <div className="rounded-lg bg-white shadow-lg dark:bg-gray-800">
-              <div className="flex items-center gap-2 p-6 text-xl font-semibold text-gray-800 dark:text-gray-200">
-                <FaCode />
-                <span>Live Code Editor</span>
+              {/* Live Code Editor */}
+              <div className="rounded-lg bg-white shadow-lg dark:bg-gray-800">
+                <div className="flex items-center gap-2 p-6 text-xl font-semibold text-gray-800 dark:text-gray-200">
+                  <FaCode />
+                  <span>Live Code Editor</span>
+                </div>
+                <div className="p-6 pt-0">
+                  <LiveCodeEditor />
+                </div>
               </div>
-              <div className="p-6 pt-0">
-                <LiveCodeEditor />
-              </div>
-            </div>
 
-            {/* Quiz */}
-            <div className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
-              <div className="flex items-center gap-2 text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
-                <FaQuestionCircle />
-                <span>Quick Exercise</span>
+              {/* Quiz */}
+              <div className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
+                <div className="flex items-center gap-2 text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
+                  <FaQuestionCircle />
+                  <span>Quick Exercise</span>
+                </div>
+                <Quiz />
               </div>
-              <Quiz />
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

@@ -5,10 +5,12 @@ import {
   FaPlayCircle,
   FaChevronDown,
   FaChevronRight,
+  FaFileAlt,
 } from "react-icons/fa";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import { useParams } from "next/navigation";
 
 interface Lesson {
   id: number;
@@ -18,10 +20,12 @@ interface Lesson {
   parentId: number | null;
 }
 
-export function SidebarAccordion({ courseName }: { courseName: string }) {
+const SidebarAccordionComponent = ({ courseName }: { courseName: string }) => {
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [activeLesson, setActiveLesson] = useState<number | null>(null);
   const { user } = useAuth();
+  const params = useParams() as { courseName: string; lessonId: string };
+  const currentLessonId = parseInt(params.lessonId);
 
   useEffect(() => {
     const fetchLessons = async () => {
@@ -50,7 +54,11 @@ export function SidebarAccordion({ courseName }: { courseName: string }) {
                 isUnlocked ? `/courses/${courseName}/${lesson.id}` : "/pricing"
               }
               key={lesson.id}
-              className="flex items-center gap-2 rounded-md p-2 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+              className={`flex items-center gap-2 rounded-md p-2 text-sm font-medium ${
+                currentLessonId === lesson.id
+                  ? "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
+                  : "text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+              }`}
             >
               {isUnlocked ? (
                 <FaPlayCircle className="h-4 w-4 text-green-500" />
@@ -65,7 +73,11 @@ export function SidebarAccordion({ courseName }: { courseName: string }) {
         return (
           <div key={lesson.id}>
             <div
-              className="flex items-center justify-between rounded-md p-2 cursor-pointer text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+              className={`flex items-center justify-between rounded-md p-2 cursor-pointer text-sm font-medium ${
+                currentLessonId === lesson.id
+                  ? "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
+                  : "text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+              }`}
               onClick={() => setActiveLesson(isActive ? null : lesson.id)}
             >
               <div className="flex items-center gap-2">
@@ -101,10 +113,14 @@ export function SidebarAccordion({ courseName }: { courseName: string }) {
                           : "/pricing"
                       }
                       key={subLesson.id}
-                      className="flex items-center gap-2 rounded-md p-2 text-sm font-medium text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
+                      className={`flex items-center gap-2 rounded-md p-2 text-sm font-medium ${
+                        currentLessonId === subLesson.id
+                          ? "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
+                          : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
+                      }`}
                     >
                       {isSubLessonUnlocked ? (
-                        <FaPlayCircle className="h-4 w-4 text-green-500" />
+                        <FaFileAlt className="h-4 w-4 text-green-500" />
                       ) : (
                         <FaLock className="h-4 w-4 text-red-500" />
                       )}
@@ -119,4 +135,6 @@ export function SidebarAccordion({ courseName }: { courseName: string }) {
       })}
     </div>
   );
-}
+};
+
+export const SidebarAccordion = memo(SidebarAccordionComponent);
