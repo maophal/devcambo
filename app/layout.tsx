@@ -5,6 +5,7 @@ import { Footer } from "./components/Footer";
 import { I18nProvider } from "./components/i18n-provider";
 import { RightSidebarMenu } from "./components/RightSidebarMenu";
 import Script from "next/script";
+import './globals.css';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,7 +24,7 @@ export default function RootLayout({
   return (
     <html lang={params.locale}>
       <head>
-        <Script src="https://cdn.tailwindcss.com" strategy="beforeInteractive" />
+        {/* <Script src="https://cdn.tailwindcss.com" strategy="beforeInteractive" /> */}
       </head>
       <body className={inter.className}>
         <I18nProvider locale={params.locale} namespaces={["common"]}>

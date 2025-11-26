@@ -9,6 +9,7 @@ import {
 } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
+import { UserProfileSkeleton } from "@/app/components/UserProfileSkeleton";
 
 interface Course {
   id: number;
@@ -88,13 +89,7 @@ export default function UserPage() {
   }, [params.userId]);
 
   if (loading) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
-        <div className="text-2xl font-semibold text-gray-700 dark:text-gray-300">
-          Loading...
-        </div>
-      </div>
-    );
+    return <UserProfileSkeleton />;
   }
 
   if (error) {
