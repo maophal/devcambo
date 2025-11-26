@@ -7,6 +7,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaBook, FaCode, FaQuestionCircle } from "react-icons/fa";
 import { LessonContentSkeleton } from "@/app/components/LessonContentSkeleton";
+import { HtmlRenderer } from "@/app/components/HtmlRenderer";
 
 interface Lesson {
   title: string;
@@ -86,10 +87,7 @@ function LessonPage({ user }: { user: any }) {
 
       {/* Lesson Content */}
       <div className="prose max-w-none rounded-lg bg-white p-6 shadow-lg dark:prose-invert dark:bg-gray-800">
-        <div
-          className="mt-4 text-lg text-gray-600 dark:text-gray-400"
-          dangerouslySetInnerHTML={{ __html: lesson?.content || "" }}
-        />
+        <HtmlRenderer htmlString={lesson?.content || ""} />
       </div>
 
       {/* Live Code Editor */}
