@@ -3,9 +3,6 @@
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
-  FaUser,
-  FaEnvelope,
-  FaCalendarAlt,
   FaBook,
   FaTrophy,
   FaCheckCircle,

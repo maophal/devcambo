@@ -7,8 +7,6 @@ const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const adapter = new PrismaPg(pool);
 
 declare global {
-  // allow global `var` declarations
-  // eslint-disable-next-line no-var
   var prisma: PrismaClient | undefined;
 }
 

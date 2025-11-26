@@ -30,5 +30,9 @@ export async function POST(req: Request) {
     expiresIn: "1d",
   });
 
-  return NextResponse.json({ token });
+  return NextResponse.json({
+    token,
+    userId: user.id,
+    userName: user.name,
+  });
 }

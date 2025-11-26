@@ -98,7 +98,7 @@ export default function SignupPage() {
             <span className="text-gray-900">()</span>
           </button>
           <div className="text-center text-sm text-gray-400">
-            <span className="text-gray-500">// Already have an account?</span>{" "}
+            {/* <span className="text-gray-500">// Already have an account?</span>{" "} */}
             <Link href="/login" className="text-blue-400 underline">
               {t("login")}
             </Link>

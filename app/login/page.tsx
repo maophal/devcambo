@@ -25,9 +25,10 @@ export default function LoginPage() {
     });
 
     if (res.ok) {
-      const { token } = await res.json();
-      // In a real app, you would store the token in localStorage or a cookie
-      console.log("token", token);
+      const { token, userId, userName } = await res.json();
+      localStorage.setItem("token", token);
+      localStorage.setItem("userId", userId);
+      localStorage.setItem("userName", userName);
       router.push("/");
     } else {
       const data = await res.json();
@@ -86,7 +87,7 @@ export default function LoginPage() {
             <span className="text-gray-900">()</span>
           </button>
           <div className="text-center text-sm text-gray-400">
-            <span className="text-gray-500">// {t("dont_have_account")}</span>{" "}
+            {/* <span className="text-gray-500">// {t("dont_have_account")}</span>{" "} */}
             <Link href={"/signup"} className="text-blue-400 underline">
               {t("sign_up")}
             </Link>

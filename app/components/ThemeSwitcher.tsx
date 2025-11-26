@@ -3,30 +3,23 @@
 import { useState, useEffect } from "react";
 
 export function ThemeSwitcher() {
-  const [mounted, setMounted] = useState(false);
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
     const isDarkMode = localStorage.getItem("theme") === "dark";
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsDark(isDarkMode);
   }, []);
 
   useEffect(() => {
-    if (mounted) {
-      if (isDark) {
-        document.documentElement.classList.add("dark");
-        localStorage.setItem("theme", "dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-        localStorage.setItem("theme", "light");
-      }
+    if (isDark) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
     }
-  }, [isDark, mounted]);
-
-  if (!mounted) {
-    return null;
-  }
+  }, [isDark]);
 
   return (
     <button
