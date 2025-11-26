@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.transition-max-height {
+  transition: max-height 0.5s ease-in-out;
+}

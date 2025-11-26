@@ -55,89 +55,96 @@ async function main() {
   ];
 
   for (const course of courses) {
-    let lessons: LessonData[] = [
-      {
-        title: `Getting Started with ${course.name}`,
-        content: `This is the content for the first lesson of the ${course.name} course.`,
-        order: 1,
-      },
-      {
-        title: `Advanced ${course.name}`,
-        content: `This is the content for the second lesson of the ${course.name} course.`,
-        order: 2,
-      },
-    ];
-
     if (course.name === 'javascript') {
-      lessons = [
-        {
+      const jsCourse = await prisma.course.create({
+        data: {
+          title: course.name,
+          description: course.description,
+        },
+      });
+
+      const basics = await prisma.lesson.create({
+        data: {
           title: 'JavaScript Basics',
-          content: 'This lesson covers the fundamental concepts of JavaScript. You will learn about variables, data types (String, Number, Boolean, Null, Undefined, Symbol, BigInt), and operators (arithmetic, assignment, comparison, logical). We will also introduce basic control flow with if/else statements and for/while loops.',
+          content:
+            'This lesson covers the fundamental concepts of JavaScript. You will learn about variables, data types (String, Number, Boolean, Null, Undefined, Symbol, BigInt), and operators (arithmetic, assignment, comparison, logical). We will also introduce basic control flow with if/else statements and for/while loops.',
+          order: 1,
+          courseId: jsCourse.id,
+        },
+      });
+
+      await prisma.lesson.create({
+        data: {
+          title: 'Variables',
+          content: 'Content for variables',
+          order: 1,
+          parentId: basics.id,
+          courseId: jsCourse.id,
+        },
+      });
+
+      await prisma.lesson.create({
+        data: {
+          title: 'Data Types',
+          content: 'Content for data types',
+          order: 2,
+          parentId: basics.id,
+          courseId: jsCourse.id,
+        },
+      });
+
+      const functions = await prisma.lesson.create({
+        data: {
+          title: 'Functions and Scope',
+          content:
+            'In this lesson, you will dive deep into functions. You will learn how to declare functions (function declarations, function expressions, arrow functions), pass arguments, and return values. We will also cover the concept of scope (global, function, block) and closures.',
+          order: 2,
+          courseId: jsCourse.id,
+        },
+      });
+
+      await prisma.lesson.create({
+        data: {
+          title: 'Function Declarations',
+          content: 'Content for function declarations',
+          order: 1,
+          parentId: functions.id,
+          courseId: jsCourse.id,
+        },
+      });
+
+      await prisma.lesson.create({
+        data: {
+          title: 'Arrow Functions',
+          content: 'Content for arrow functions',
+          order: 2,
+          parentId: functions.id,
+          courseId: jsCourse.id,
+        },
+      });
+    } else {
+      let lessons: LessonData[] = [
+        {
+          title: `Getting Started with ${course.name}`,
+          content: `This is the content for the first lesson of the ${course.name} course.`,
           order: 1,
         },
         {
-          title: 'Functions and Scope',
-          content: 'In this lesson, you will dive deep into functions. You will learn how to declare functions (function declarations, function expressions, arrow functions), pass arguments, and return values. We will also cover the concept of scope (global, function, block) and closures.',
+          title: `Advanced ${course.name}`,
+          content: `This is the content for the second lesson of the ${course.name} course.`,
           order: 2,
-          quiz: {
-            create: {
-              title: 'Functions and Scope Quiz',
-              questions: {
-                create: [
-                  {
-                    text: 'What is a closure in JavaScript?',
-                    answers: {
-                      create: [
-                        { text: 'A function having access to the parent scope, even after the parent function has closed.', isCorrect: true },
-                        { text: 'A way to lock a variable to a specific value.', isCorrect: false },
-                        { text: 'A special type of loop.', isCorrect: false },
-                        { text: 'A built-in JavaScript method for closing windows.', isCorrect: false },
-                      ],
-                    },
-                  },
-                  {
-                    text: 'What is the difference between `let` and `var` in terms of scope?',
-                    answers: {
-                      create: [
-                        { text: '`let` is block-scoped and `var` is function-scoped.', isCorrect: true },
-                        { text: '`var` is block-scoped and `let` is function-scoped.', isCorrect: false },
-                        { text: 'There is no difference in terms of scope.', isCorrect: false },
-                        { text: '`let` is for numbers and `var` is for strings.', isCorrect: false },
-                      ],
-                    },
-                  },
-                ],
-              },
-            },
-          },
-        },
-        {
-          title: 'DOM Manipulation',
-          content: 'This lesson teaches you how to interact with the Document Object Model (DOM). You will learn how to select elements from the HTML document, change their content and style, and handle events like clicks and keypresses. This is the foundation of creating dynamic and interactive web pages.',
-          order: 3,
-        },
-        {
-          title: 'Asynchronous JavaScript',
-          content: 'Modern web applications heavily rely on asynchronous operations. In this lesson, you will learn how to handle asynchronous code in JavaScript using callbacks, Promises, and the modern async/await syntax. We will also cover how to fetch data from external APIs.',
-          order: 4,
-        },
-        {
-          title: 'ES6+ Features',
-          content: 'This lesson introduces you to the modern features of JavaScript, starting from ECMAScript 2015 (ES6). You will learn about let and const, template literals, destructuring, default parameters, rest and spread operators, classes, and modules. These features will help you write cleaner and more efficient code.',
-          order: 5,
         },
       ];
-    }
-
-    await prisma.course.create({
-      data: {
-        title: course.name,
-        description: course.description,
-        lessons: {
-          create: lessons,
+      await prisma.course.create({
+        data: {
+          title: course.name,
+          description: course.description,
+          lessons: {
+            create: lessons,
+          },
         },
-      },
-    });
+      });
+    }
   }
 
   console.log('Seeding finished.');

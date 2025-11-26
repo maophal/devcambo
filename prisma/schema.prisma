@@ -67,6 +67,9 @@ model Lesson {
   quiz        Quiz?
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
+  parentId    Int?
+  parent      Lesson?        @relation("LessonSubLesson", fields: [parentId], references: [id])
+  subLessons  Lesson[]       @relation("LessonSubLesson")
 }
 
 model Enrollment {
