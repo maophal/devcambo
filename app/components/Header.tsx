@@ -4,7 +4,7 @@ import Link from "next/link";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import { useTranslation } from "react-i18next";
-import { FaUserCircle } from "react-icons/fa"; // Import user icon
+import { FaRegUserCircle } from "react-icons/fa"; // Import user icon
 import { useAuth } from "../contexts/AuthContext";
 import { HeaderSkeleton } from "./HeaderSkeleton";
 
@@ -39,7 +39,7 @@ export function Header() {
             {isLoggedIn && user ? (
               <>
                 <Link href={`/users/${user.id}`} className="flex items-center gap-2">
-                  <FaUserCircle className="h-8 w-8 text-gray-700 dark:text-gray-300" />
+                  <FaRegUserCircle className="h-8 w-8 text-gray-700 dark:text-gray-300" />
                   <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
                     {user.name}
                   </span>
