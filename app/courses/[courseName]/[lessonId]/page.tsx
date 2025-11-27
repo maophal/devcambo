@@ -184,10 +184,12 @@ function LessonPage({ user }: { user: any }) {
 
       {/* Live Code Editor */}
       {lesson?.liveCode && (
-        <LiveCodeEditor
+        <div className="p-6 bg-white rounded-lg shadow-lg dark:bg-gray-800">
+            <LiveCodeEditor
           initialCode={lesson.liveCode.code}
           language={lesson.liveCode.type}
         />
+        </div>
       )}
 
       {/* Videos */}
