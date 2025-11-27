@@ -28,6 +28,10 @@ export async function GET(
         orderBy: {
           order: "asc",
         },
+        include: {
+          liveCode: true,
+          videos: true,
+        },
       },
     },
   });

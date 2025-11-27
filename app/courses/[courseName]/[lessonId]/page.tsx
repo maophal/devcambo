@@ -8,6 +8,27 @@ import { useEffect, useState } from "react";
 import { FaBook, FaCode, FaQuestionCircle } from "react-icons/fa";
 import { LessonContentSkeleton } from "@/app/components/LessonContentSkeleton";
 import Link from "next/link";
+import { VideoPlayer } from "@/app/components/VideoPlayer";
+
+enum CodeType {
+  HTML = "HTML",
+  CSS = "CSS",
+  JS = "JS",
+  TS = "TS",
+}
+
+interface LiveCode {
+  id: number;
+  code: string;
+  type: CodeType;
+  lessonId: number;
+}
+
+interface Video {
+  id: number;
+  url: string;
+  lessonId: number;
+}
 
 interface Lesson {
   id: number;
@@ -15,6 +36,8 @@ interface Lesson {
   content: string;
   isFree: boolean;
   parentId: number | null;
+  liveCode: LiveCode | null;
+  videos: Video[];
 }
 
 function LessonPage({ user }: { user: any }) {
@@ -24,15 +47,6 @@ function LessonPage({ user }: { user: any }) {
   const [allLessons, setAllLessons] = useState<Lesson[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [jsCode, setJsCode] = useState("");
-
-  const extractJsCode = (htmlString: string) => {
-    if (typeof window === "undefined") return "";
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(htmlString, "text/html");
-    const scripts = Array.from(doc.querySelectorAll("script"));
-    return scripts.map((script) => script.text).join("\n");
-  };
 
   const [nextLesson, setNextLesson] = useState<Lesson | null>(null);
   const [prevLesson, setPrevLesson] = useState<Lesson | null>(null);
@@ -59,7 +73,6 @@ function LessonPage({ user }: { user: any }) {
 
           setLesson(lessonData);
           setAllLessons(allLessonsData);
-          setJsCode(extractJsCode(lessonData.content));
 
           const subLessons = allLessonsData.filter(
             (l: Lesson) => l.parentId !== null
@@ -165,20 +178,20 @@ function LessonPage({ user }: { user: any }) {
       <div
         className="prose max-w-none rounded-lg bg-white p-6 shadow-lg dark:prose-invert dark:bg-gray-800"
         dangerouslySetInnerHTML={{
-          __html: lesson?.content.replace(/<script\b[^>]*>[\s\S]*?<\/script\b[^>]*>/gi, '') || "",
+          __html: lesson?.content || "",
         }}
       />
 
       {/* Live Code Editor */}
-      <div className="rounded-lg bg-white shadow-lg dark:bg-gray-800">
-        <div className="flex items-center gap-2 p-6 text-xl font-semibold text-gray-800 dark:text-gray-200">
-          <FaCode />
-          <span>Live Code Editor</span>
-        </div>
-        <div className="p-6 pt-0">
-          <LiveCodeEditor initialJsCode={jsCode} />
-        </div>
-      </div>
+      {lesson?.liveCode && (
+        <LiveCodeEditor
+          initialCode={lesson.liveCode.code}
+          language={lesson.liveCode.type}
+        />
+      )}
+
+      {/* Videos */}
+      <VideoPlayer videos={lesson?.videos || []} />
 
       {/* Quiz */}
       <div className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">

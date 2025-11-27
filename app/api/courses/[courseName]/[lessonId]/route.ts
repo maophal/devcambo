@@ -13,6 +13,10 @@ export async function GET(
         title: resolveParam.courseName,
       },
     },
+    include: {
+      liveCode: true,
+      videos: true,
+    },
   });
 
   if (!lesson) {

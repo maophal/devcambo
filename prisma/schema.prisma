@@ -65,11 +65,35 @@ model Lesson {
   course      Course         @relation(fields: [courseId], references: [id])
   progress    UserProgress[]
   quiz        Quiz?
+  liveCode    LiveCode?
+  videos      Video[]
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
   parentId    Int?
   parent      Lesson?        @relation("LessonSubLesson", fields: [parentId], references: [id])
   subLessons  Lesson[]       @relation("LessonSubLesson")
+}
+
+model LiveCode {
+  id       Int      @id @default(autoincrement())
+  code     String
+  type     CodeType @default(JS)
+  lessonId Int      @unique
+  lesson   Lesson   @relation(fields: [lessonId], references: [id])
+}
+
+model Video {
+  id       Int    @id @default(autoincrement())
+  url      String
+  lessonId Int
+  lesson   Lesson @relation(fields: [lessonId], references: [id])
+}
+
+enum CodeType {
+  HTML
+  CSS
+  JS
+  TS
 }
 
 model Enrollment {
