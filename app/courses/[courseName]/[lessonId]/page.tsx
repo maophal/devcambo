@@ -151,13 +151,14 @@ function LessonPage({ user }: { user: any }) {
         </Link>
       </div>
       {/* Lesson Header */}
-      <div className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
-        <h1 className="capitalize text-3xl font-extrabold text-gray-900 dark:text-gray-100">
-          {params.courseName} - Lesson {params.lessonId}
-        </h1>
-        <h2 className="mt-2 text-2xl font-bold text-gray-700 dark:text-gray-300">
+      <div className="rounded-lg border-l-4 border-blue-500 bg-white p-6 shadow-lg dark:bg-gray-800">
+        <div className="flex items-center gap-2 text-sm font-medium uppercase tracking-wider text-blue-600 dark:text-blue-400">
+          <FaBook />
+          <span>{params.courseName}</span>
+        </div>
+        <h1 className="mt-2 text-3xl font-extrabold capitalize text-gray-900 dark:text-gray-100">
           {lesson?.title}
-        </h2>
+        </h1>
       </div>
 
       {/* Lesson Content */}
