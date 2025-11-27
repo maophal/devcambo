@@ -2,6 +2,9 @@
 
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useAuth } from "@/app/contexts/AuthContext";
+import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import {
   FaBook,
   FaTrophy,
@@ -67,6 +70,20 @@ function UserPage() {
   const params = useParams() as { userId: string };
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const { logout } = useAuth();
+  const router = useRouter();
+  const { t } = useTranslation();
+
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/logout", {
+        method: "POST",
+      });
+    } finally {
+      logout();
+      router.push("/login");
+    }
+  };
 
   useEffect(() => {
     if (params.userId) {
@@ -130,6 +147,12 @@ function UserPage() {
                 <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-300">
                   Joined on {new Date(user.createdAt).toLocaleDateString()}
                 </p>
+                 <button
+                  onClick={handleLogout}
+                  className="mt-4 w-full rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800"
+                >
+                  {t("logout")}
+                </button>
               </div>
               <div className="mt-6 space-y-4">
                 <StatCard icon={<FaBook className="h-6 w-6"/>} label="Courses Enrolled" value={user.enrollments.length} />

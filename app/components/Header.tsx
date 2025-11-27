@@ -5,25 +5,14 @@ import { LanguageSwitcher } from "./LanguageSwitcher";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import { useTranslation } from "react-i18next";
 import { FaUserCircle } from "react-icons/fa"; // Import user icon
-import { useRouter } from "next/navigation";
 import { useAuth } from "../contexts/AuthContext";
 import { HeaderSkeleton } from "./HeaderSkeleton";
 
 export function Header() {
   const { t } = useTranslation();
-  const router = useRouter();
-  const { isLoggedIn, user, loading, logout } = useAuth();
+  const { isLoggedIn, user, loading } = useAuth();
 
-  const handleLogout = async () => {
-    try {
-      await fetch("/api/logout", {
-        method: "POST",
-      });
-    } finally {
-      logout();
-      router.push("/login");
-    }
-  };
+
 
   if (loading) {
     return <HeaderSkeleton />;
@@ -55,12 +44,6 @@ export function Header() {
                     {user.name}
                   </span>
                 </Link>
-                <button
-                  onClick={handleLogout}
-                  className="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800"
-                >
-                  {t("logout")}
-                </button>
               </>
             ) : (
               <Link
